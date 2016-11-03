@@ -1,21 +1,24 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 int main(void)
 {
   char *string; // initiate variable for testing
   string = "word";
 
-  char guess[35];//create array to store user input
+  char guess[64];
+
   printf("what is your guess:");
-  printf("%zd\n", sizeof(guess)); //check size of array for debugging purposes
+  
   fgets(guess, sizeof(stdin), stdin);//try to pull in the size of stdin.
-  printf("%zd\n", sizeof(guess));//check for debugging
+  char *fool = (char *)malloc(strlen(guess));
+  printf("%zd", sizeof(*fool));
 
   //a basic for loop that checks the user input against or variable array 
   //poorly designed, but good for a starting point 
   for(int b=0; b<4; b++){
-    if(guess[0] == string[b]){
+    if(fool[0] == string[b]){
       printf("_%c__\n", string[b]);
     }
     else{
@@ -23,5 +26,6 @@ int main(void)
     }
   }
 
+  free(fool);
 
 }
