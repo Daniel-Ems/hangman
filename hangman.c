@@ -13,6 +13,8 @@ int main(void)
   
   fgets(guess, sizeof(stdin), stdin);//try to pull in the size of stdin.
   char *fool = (char *)malloc(strlen(guess));
+  fool = strncpy(fool, guess, 1);
+  printf("%s\n", fool);
   printf("%zd\n", sizeof(*fool));
 
   //a basic for loop that checks the user input against or variable array 
