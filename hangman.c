@@ -4,30 +4,30 @@
 
 int main(void)
 {
-  char *string; // initiate variable for testing
-  string = "word";
+  char string[5] = {'w','o','r','d'}; // initiate variable for testing
+ 
 
-  char guess[64];
+  char guess[5];
+  char fool[5];
 
   printf("what is your guess:");
   
-  fgets(guess, sizeof(stdin), stdin);//try to pull in the size of stdin.
-  char *fool = (char *)malloc(strlen(guess));
-  fool = strncpy(fool, guess, 1);
-  printf("%s\n", fool);
-  printf("%zd\n", sizeof(*fool));
-
+  fgets(guess, 5, stdin);//takes user input, puts it in guess
+   strncpy(fool, guess, 5);
+  char *current = strtok(fool, "\n");
+  printf("%c -\n", fool[0]);
+  
   //a basic for loop that checks the user input against or variable array 
   //poorly designed, but good for a starting point 
   for(int b=0; b<4; b++){
-    if(fool[0] == string[b]){
+    if(*current == string[b]){
       printf("_%c__\n", string[b]);
     }
     else{
-      printf("sorry, %s is not in the word\n", fool);
+      printf("sorry, %s is not in the word\n", current);
     }
   }
 
-  free(fool);
+  
 
 }
