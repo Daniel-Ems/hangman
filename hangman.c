@@ -8,7 +8,7 @@ int main(void)
 
   char guess[35];//create array to store user input
   printf("what is your guess:");
-  printf("%zd", sizeof(guess)); //check size of array for debugging purposes
+  printf("%zd\n", sizeof(guess)); //check size of array for debugging purposes
   fgets(guess, sizeof(stdin), stdin);//try to pull in the size of stdin.
   printf("%zd\n", strlen(guess));//check for debugging
 
