@@ -5,39 +5,26 @@
 #include <ctype.h>
 #include <time.h>
 
+char *pick_word(FILE *words);
 void guess_check(char *hangman, char *rand_word, char *tmp_buf);
 void make_hangman(char *hangman);
 bool is_valid(char *tmp_buf);
 void hangy_hangy(char *string, char *hangman, char *current);
+
+
 int main()
 {
-
-    char rand_word[32];
-    char tmp_buf[32];
-    srand(time (NULL));
-
+    char *tmp_buf[64];
     //TODO: check for words in ~./words, and if not there, error out. also, 
     //accept user input.
     FILE *words;
     words = fopen("words", "r");
 
-    //This while loop was found from Liam, and the if((rand() / (float)Rand_MAX
-    //< (1.0 /++ a)
-    int num_lines= 0;
-    while(fgets(tmp_buf, sizeof(tmp_buf), words))
-    {
-        if(is_valid(tmp_buf))
-        {
-            if((rand() / (float)RAND_MAX) < (1.0 / ++num_lines))
-            {
-                strncpy(rand_word, tmp_buf, sizeof(rand_word));
-            }
-         }
-    }
-    
+    char *rand_word = pick_word(words);
     strtok(rand_word, "\n ");
+
     //DEBUGGING PRINT STATEMENTS
-    printf("number of good lines in a file: %d\n", num_lines);//debugging
+    //printf("number of good lines in a file: %d\n", num_lines);//debugging
     printf("whats is random word: %s\n", rand_word);//debugging
     printf("strlen(rand_word)%zd\n", strlen(rand_word));//debugging
 
@@ -51,7 +38,7 @@ int main()
     guess_check(hangman, rand_word, tmp_buf);
     //TODO: put the fgets in a loop to repeatedly ask for user input 
 
-
+    free(rand_word);
     fclose(words);
     free(hangman);
 }
@@ -75,7 +62,7 @@ void hangy_hangy(char *rand_word, char *hangman, char *tmp_buf)
 //TODO: need to account for lines with spaces
 bool is_valid(char *tmp_buf)
 {
-    strtok(tmp_buf, "\n ");
+    strtok(tmp_buf, "\n");
     int a = 0;
     while(tmp_buf[a])
     {
@@ -119,6 +106,29 @@ void guess_check(char *hangman, char *rand_word, char *tmp_buf)
   }
 }
 
+
+//This while loop was found from Liam, and the if((rand() / (float)Rand_MAX
+//< (1.0 /++ a)
+enum {RANDOM_MAX = 64};
+char *pick_word(FILE *words)
+{
+    srand(time (NULL));
+    int num_lines = 0;
+    char *rand_word = malloc(RANDOM_MAX);
+    char tmp_buf[64];
+    while(fgets(tmp_buf, RANDOM_MAX, words))
+    {
+        printf("Whats in tmp_buf: %s\n", tmp_buf);
+        if(is_valid(tmp_buf))
+        {
+            if((rand() / (float)RAND_MAX) < (1.0 / ++num_lines))
+            {
+                strncpy(rand_word, tmp_buf, RANDOM_MAX);
+            }
+         }
+    }
+  return rand_word;
+}
 
 
 
