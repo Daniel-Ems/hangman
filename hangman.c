@@ -9,42 +9,36 @@ bool is_valid(char *guess);
 void hangy_hangy(char *string, char *hangman, char *current);
 int main()
 {
-    //TODO: turn string into a random word from a file
-    char strings[32]; // initiate variable for testing
-    char guess[32];
 
+    char rand_word[32];
+    char tmp_buf[32];
+    srand(time (NULL));
+
+    //TODO: check for words in ~./words, and if not there, error out. also, 
+    //accept user input.
     FILE *words;
     words = fopen("words", "r");
 
-    srand(time (NULL));
-    int a = 0;
-    while(fgets(guess, sizeof(guess), words)){
-        if(is_valid(guess)){
-            if((rand() / (float)RAND_MAX) < (1.0 / ++a)){
-                strncpy(strings, guess, sizeof(strings));
+    //This while loop was found from Liam, and the if((rand() / (float)Rand_MAX
+    //< (1.0 /++ a)
+    
+    int num_lines= 0;
+    while(fgets(tmp_buf, sizeof(tmp_buf), words)){
+        if(is_valid(tmp_buf)){
+            if((rand() / (float)RAND_MAX) < (1.0 / ++num_lines)){
+                strncpy(rand_word, tmp_buf, sizeof(rand_word));
             }
          }
     }
-/*
-    rewind(words);
-
-    int counter = 0;
-    while(2 != counter)
-    {
-        if(fgets(guess,sizeof(guess), words) != NULL){
-            
-            counter++;
-        }
-    }
-*/
-
-    printf("%d\n", a);//debugging
-    printf("whats in strings: %s\n", strings);//debugging
-    printf("strlen(guess)%zd\n", strlen(guess));//debugging
+    
     char *string = strtok(strings, "\n ");
+    //DEBUGGING PRINT STATEMENTS
+    printf("number of good lines in a file: %d\n", a);//debugging
+    printf("whats is random word: %s\n", strings);//debugging
+    printf("strlen(guess)%zd\n", strlen(guess));//debugging
     printf("sizeof(string)%zd\n", sizeof(string));//debugging
 
-     //TODO: make this accomodate any sized word that comes in from the file.
+     //TODO: make this accomodate any sized word that comes in to strings.
     char hangman[32] = {'_','_','_','_'};
   
     char fool[32];
@@ -76,6 +70,7 @@ void hangy_hangy(char *string, char *hangman, char *current)
   
 }
 
+//TODO: need to account for lines with spaces
 bool is_valid(char *guess)
 {
     strtok(guess, "\n ");
