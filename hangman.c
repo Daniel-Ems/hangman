@@ -2,9 +2,12 @@
 #include <string.h>
 #include <stdlib.h>
 
+
 void hangy_hangy(char *string, char *hangman, char *current);
-int main(void)
-{ //TODO: turn string into a random word from a file
+int main(int argc, char* argv[])
+{
+
+  //TODO: turn string into a random word from a file
   char string[32] = {'w','o','r','d'}; // initiate variable for testing
 
   //TODO: make this accomodate any sized word that comes in from the file.
@@ -20,17 +23,36 @@ int main(void)
   fgets(guess, 32, stdin);//takes in 32 bytes of user input, puts it in guess 
   strncpy(fool, guess, 32);//copies whats in guess and puts it in fool 
   char *current = strtok(fool, "\n ");// creates a token from the strtok
+  printf("%zd\n", strlen(current));
   hangy_hangy(string, hangman, current);
+  
 }
   //a starting loop that checks and prints input, against words, and prints out
 void hangy_hangy(char *string, char *hangman, char *current)
 {
-  for(int b=0; b<32; b++){
-    for(int a=0; a < 32; ++a){
+
+  for(int b=0; b<5; b++){
+    for(int a=0; a < 5; ++a){
       if(current[b] == string[a]){
         hangman[a] = current[b];
       }
-   }
+    }
   }
   printf("%s\n", hangman);
+  
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
