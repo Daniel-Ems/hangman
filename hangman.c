@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include <time.h>
 
+void guess_check(char *hangman, char *rand_word, char *tmp_buf);
 void make_hangman(char *hangman);
 bool is_valid(char *tmp_buf);
 void hangy_hangy(char *string, char *hangman, char *current);
@@ -46,25 +47,10 @@ int main()
     strncpy(hangman, rand_word, word_length);//copy my randomword to hangman
     make_hangman(hangman);
 
-    printf("%s:\n", hangman);
-
+    //printf("%s:\n", hangman);
+    guess_check(hangman, rand_word, tmp_buf);
     //TODO: put the fgets in a loop to repeatedly ask for user input 
-while(1)
- {
-    printf("hangman %s-, rand_word %s-\n", hangman, rand_word); 
-    strtok(tmp_buf, "\n ");// creates a token from the strtok
-    if(*hangman != *rand_word)
-    {
-       printf("%s:\n", hangman);
-       fgets(tmp_buf, sizeof(tmp_buf), stdin);
-       printf("tmp_buf%s-\n", tmp_buf);
-       hangy_hangy(rand_word, hangman, tmp_buf);
-     }
-     else
-     {
-      break;
-     }
-}
+
 
     fclose(words);
     free(hangman);
@@ -114,7 +100,25 @@ void make_hangman(char *hangman)
     }
 }
 
-  
+void guess_check(char *hangman, char *rand_word, char *tmp_buf)
+{
+  while(1)
+  { 
+    strtok(tmp_buf, "\n ");// creates a token from the strtok
+    if(strncmp(hangman, rand_word, strlen(rand_word)))
+    {
+       printf("%s:", hangman);
+       fgets(tmp_buf, sizeof(tmp_buf), stdin);
+       printf("tmp_buf%s-\n", tmp_buf);
+       hangy_hangy(rand_word, hangman, tmp_buf);
+    }
+    else
+    {
+       break;
+    }
+  }
+}
+
 
 
 
