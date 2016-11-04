@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include <time.h>
 
+void make_hangman(char *hangman);
 bool is_valid(char *tmp_buf);
 void hangy_hangy(char *string, char *hangman, char *current);
 int main()
@@ -40,6 +41,8 @@ int main()
 
     //TODO: make this accomodate any sized word that comes in to rand_word.
     char *hangman = malloc(strlen(rand_word));
+    strncpy(hangman, rand_word, strlen(rand_word));
+    make_hangman(hangman);
   
     char fool[32];
 
@@ -85,6 +88,15 @@ bool is_valid(char *tmp_buf)
       }
     }
   return true;
+}
+
+void make_hangman(char *hangman)
+{
+    while(*hangman)
+    {
+      *hangman = '_';
+      ++hangman;
+    }
 }
 
   
