@@ -3,25 +3,26 @@
 #include <stdlib.h>
 
 int main(void)
-{
-  char string[5] = {'w','o','r','d'}; // initiate variable for testing
-  char hangman[5] = {'_','_','_','_'};
+{ //TODO: turn string into a random word from a file
+  char string[32] = {'w','o','r','d'}; // initiate variable for testing
 
-  char guess[5];
-  char fool[5];
+  //TODO: make this accomodate any sized word that comes in from the file.
+  char hangman[32] = {'_','_','_','_'};
+  
+  //this can stay the same
+  char guess[32];
+  char fool[32];
 
-  printf("what is your guess:");
+  printf("%s", hangman);
   
-  fgets(guess, 5, stdin);//takes user input, puts it in guess
-   strncpy(fool, guess, 5);
-  char *current = strtok(fool, "\n ");
-  printf("%s\n", current);
-  printf("%c -\n", fool[0]);
-  
-  //a basic for loop that checks the user input against or variable array 
-  //poorly designed, but good for a starting point 
-  for(int b=0; b<4; b++){
-    for(int a=0; a < 4; ++a){
+  //TODO: put the fgets in a loop to repeatedly ask for user input 
+  fgets(guess, 32, stdin);//takes in 32 bytes of user input, puts it in guess 
+  strncpy(fool, guess, 32);//copies whats in guess and puts it in fool 
+  char *current = strtok(fool, "\n ");// creates a token from the strtok
+
+  //a starting loop that checks and prints input, against words, and prints out
+  for(int b=0; b<32; b++){
+    for(int a=0; a < 32; ++a){
       if(current[b] == string[a]){
         hangman[a] = current[b];
       }
