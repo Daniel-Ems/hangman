@@ -10,7 +10,7 @@ void hangy_hangy(char *string, char *hangman, char *current);
 int main()
 {
     //TODO: turn string into a random word from a file
-    char strings[64]; // initiate variable for testing
+    char strings[32]; // initiate variable for testing
     char guess[32];
 
     FILE *words;
@@ -18,9 +18,9 @@ int main()
 
     srand(time (NULL));
     int a = 0;
-    while((fgets(guess, sizeof(guess), words) != NULL)){
+    while(fgets(guess, sizeof(guess), words)){
         if(is_valid(guess)){
-            if((rand() / (float)RAND_MAX) <= (1.0 / ++a)){
+            if((rand() / (float)RAND_MAX) < (1.0 / ++a)){
                 strncpy(strings, guess, sizeof(strings));
             }
          }
@@ -37,7 +37,7 @@ int main()
         }
     }
 */
-    strncpy(strings,guess,(sizeof(strings)));//variable = rand()%a
+
     printf("%d\n", a);//debugging
     printf("whats in strings: %s\n", strings);//debugging
     printf("strlen(guess)%zd\n", strlen(guess));//debugging
@@ -78,6 +78,7 @@ void hangy_hangy(char *string, char *hangman, char *current)
 
 bool is_valid(char *guess)
 {
+    strtok(guess, "\n ");
     int a = 0;
     while(guess[a]){
       if(isalpha(guess[a])){
