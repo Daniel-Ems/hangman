@@ -11,9 +11,16 @@ int main()
   char guess[32];
   FILE *words;
   words = fopen("words", "r");
-  fgets(guess, sizeof(guess), words);
+  while(1)
+   {
+    if(fgets(guess, sizeof(guess), words) == NULL) break;
+    printf("%s", guess);
+  }
+  printf("%s\n", guess);
+  printf("%zd\n", strlen(guess));
   strncpy(strings, guess, sizeof(strings));
   char *string = strtok(strings, "\n ");
+  printf("%zd\n", strlen(string));
 
   //TODO: make this accomodate any sized word that comes in from the file.
   char hangman[32] = {'_','_','_','_'};
@@ -45,6 +52,11 @@ void hangy_hangy(char *string, char *hangman, char *current)
   printf("%s\n", hangman);
   
 }
+
+//void hangman(char* hangman, char *guess)
+//{
+  
+  
 
 
 
