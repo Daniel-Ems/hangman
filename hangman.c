@@ -39,9 +39,9 @@ int main()
     printf("strlen(rand_word)%zd\n", strlen(rand_word));//debugging
     printf("sizeof(rand_word)%zd\n", sizeof(rand_word));//debugging
 
-    //TODO: make this accomodate any sized word that comes in to rand_word.
-    char *hangman = malloc(strlen(rand_word));
-    strncpy(hangman, rand_word, strlen(rand_word));
+    int word_length = strlen(rand_word) + 1;
+    char *hangman = malloc(word_length);
+    strncpy(hangman, rand_word, word_length);
     make_hangman(hangman);
   
     char fool[32];
