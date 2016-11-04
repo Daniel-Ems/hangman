@@ -6,7 +6,7 @@
 #include <time.h>
 
 char *pick_word(FILE *words);
-void guess_check(char *hangman, char *rand_word, char *tmp_buf);
+void guess_check(char *hangman, char *rand_word);
 void make_hangman(char *hangman);
 bool is_valid(char *tmp_buf);
 void hangy_hangy(char *string, char *hangman, char *current);
@@ -14,7 +14,7 @@ void hangy_hangy(char *string, char *hangman, char *current);
 
 int main()
 {
-    char *tmp_buf[64];
+
     //TODO: check for words in ~./words, and if not there, error out. also, 
     //accept user input.
     FILE *words;
@@ -35,13 +35,14 @@ int main()
     make_hangman(hangman);
 
     //printf("%s:\n", hangman);
-    guess_check(hangman, rand_word, tmp_buf);
-    //TODO: put the fgets in a loop to repeatedly ask for user input 
+    guess_check(hangman, rand_word);
 
     free(rand_word);
     fclose(words);
     free(hangman);
 }
+
+
   //a starting loop that checks and prints input, against words, and prints out
 void hangy_hangy(char *rand_word, char *hangman, char *tmp_buf)
 {
@@ -87,12 +88,16 @@ void make_hangman(char *hangman)
     }
 }
 
-void guess_check(char *hangman, char *rand_word, char *tmp_buf)
+
+void guess_check(char *hangman, char *rand_word)
 {
+  char tmp_buf[64];
+  strncpy(tmp_buf, rand_word, sizeof(tmp_buf));
   while(1)
   { 
+
     strtok(tmp_buf, "\n ");// creates a token from the strtok
-    if(strncmp(hangman, rand_word, strlen(rand_word)))
+    if(strcmp(hangman, rand_word))
     {
        printf("%s:", hangman);
        fgets(tmp_buf, sizeof(tmp_buf), stdin);
@@ -108,14 +113,14 @@ void guess_check(char *hangman, char *rand_word, char *tmp_buf)
 
 
 //This while loop was found from Liam, and the if((rand() / (float)Rand_MAX
-//< (1.0 /++ a)
+//< (1.0 /++ a), as well as the malloc and tmp_buf within the function.
 enum {RANDOM_MAX = 64};
 char *pick_word(FILE *words)
 {
     srand(time (NULL));
     int num_lines = 0;
     char *rand_word = malloc(RANDOM_MAX);
-    char tmp_buf[64];
+    char tmp_buf[RANDOM_MAX];
     while(fgets(tmp_buf, RANDOM_MAX, words))
     {
         printf("Whats in tmp_buf: %s\n", tmp_buf);
