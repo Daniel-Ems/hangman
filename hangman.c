@@ -5,7 +5,7 @@
 #include <ctype.h>
 #include <time.h>
 
-bool is_valid(char *guess);
+bool is_valid(char *tmp_buf);
 void hangy_hangy(char *string, char *hangman, char *current);
 int main()
 {
@@ -31,15 +31,15 @@ int main()
          }
     }
     
-    char *string = strtok(strings, "\n ");
+    char *string = strtok(rand_word, "\n ");
     //DEBUGGING PRINT STATEMENTS
-    printf("number of good lines in a file: %d\n", a);//debugging
-    printf("whats is random word: %s\n", strings);//debugging
-    printf("strlen(guess)%zd\n", strlen(guess));//debugging
-    printf("sizeof(string)%zd\n", sizeof(string));//debugging
+    printf("number of good lines in a file: %d\n", num_lines);//debugging
+    printf("whats is random word: %s\n", rand_word);//debugging
+    printf("strlen(rand_word)%zd\n", strlen(rand_word));//debugging
+    printf("sizeof(rand_word)%zd\n", sizeof(rand_word));//debugging
 
-     //TODO: make this accomodate any sized word that comes in to strings.
-    char hangman[32] = {'_','_','_','_'};
+    //TODO: make this accomodate any sized word that comes in to rand_word.
+    char *hangman = malloc(strlen(rand_word));
   
     char fool[32];
 
@@ -47,13 +47,15 @@ int main()
   
   //TODO: put the fgets in a loop to repeatedly ask for user input 
 
-    fgets(guess, sizeof(guess), stdin);//takes in 32 bytes of user input, puts it in guess 
-    strncpy(fool, guess, sizeof(fool));//copies whats in guess and puts it in fool 
+  
+    fgets(tmp_buf, sizeof(tmp_buf), stdin);
+    strncpy(fool, tmp_buf, sizeof(fool));//copies whats in tmp_buf and puts it in fool 
     char *current = strtok(fool, "\n ");// creates a token from the strtok
     printf("%zd\n", strlen(current));
     hangy_hangy(string, hangman, current);
     fclose(words);
-  
+
+    free(hangman);
 }
   //a starting loop that checks and prints input, against words, and prints out
 void hangy_hangy(char *string, char *hangman, char *current)
@@ -71,12 +73,12 @@ void hangy_hangy(char *string, char *hangman, char *current)
 }
 
 //TODO: need to account for lines with spaces
-bool is_valid(char *guess)
+bool is_valid(char *tmp_buf)
 {
-    strtok(guess, "\n ");
+    strtok(tmp_buf, "\n ");
     int a = 0;
-    while(guess[a]){
-      if(isalpha(guess[a])){
+    while(tmp_buf[a]){
+      if(isalpha(tmp_buf[a])){
           a++;
       }else{
           return false;
