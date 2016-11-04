@@ -9,7 +9,7 @@ char *pick_word(FILE *words);
 void guess_check(char *hangman, char *rand_word);
 void make_hangman(char *hangman);
 bool is_valid(char *tmp_buf);
-void hangy_hangy(char *string, char *hangman, char *current);
+void hangy_hangy(char *string, char *hangman, char *tmp_buf);
 
 
 int main()
@@ -18,7 +18,21 @@ int main()
     //TODO: check for words in ~./words, and if not there, error out. also, 
     //accept user input.
     FILE *words;
-    words = fopen("words", "r");
+    //words = fopen("words", "r");
+
+    const char *name = getenv("HOME");
+    char path[64];
+    strcpy(path, name);
+    strcat(path, "/.words");
+    printf("%s\n", path);
+
+    //FILE *pathed;
+    words = fopen(path, "r");
+    if(!words)
+    {
+        perror ("sorry");
+    }
+    
 
     char *rand_word = pick_word(words);
     strtok(rand_word, "\n ");
@@ -46,9 +60,9 @@ int main()
   //a starting loop that checks and prints input, against words, and prints out
 void hangy_hangy(char *rand_word, char *hangman, char *tmp_buf)
 {
-  for(unsigned int b=0; b < strlen(rand_word); b++)
+  for(size_t b=0; b < strlen(rand_word); b++)
   {
-    for(unsigned int a=0; a < strlen(rand_word); ++a)
+    for(size_t a=0; a < strlen(rand_word); ++a)
     {
       if(tmp_buf[b] == rand_word[a])
       {
@@ -56,7 +70,6 @@ void hangy_hangy(char *rand_word, char *hangman, char *tmp_buf)
       }
     }
   }
-  printf("%s\n", hangman);
   
 }
 
@@ -92,16 +105,13 @@ void make_hangman(char *hangman)
 void guess_check(char *hangman, char *rand_word)
 {
   char tmp_buf[64];
-  strncpy(tmp_buf, rand_word, sizeof(tmp_buf));
   while(1)
   { 
-
-    strtok(tmp_buf, "\n ");// creates a token from the strtok
     if(strcmp(hangman, rand_word))
     {
        printf("%s:", hangman);
        fgets(tmp_buf, sizeof(tmp_buf), stdin);
-       printf("tmp_buf%s-\n", tmp_buf);
+       strtok(tmp_buf, "\n");// creates a token from the strtok
        hangy_hangy(rand_word, hangman, tmp_buf);
     }
     else
