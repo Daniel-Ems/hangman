@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include <time.h>
+#include <sysexits.h>
 
 char *pick_word(FILE *words);
 void guess_check(char *hangman, char *rand_word);
@@ -12,35 +13,39 @@ bool is_valid(char *tmp_buf);
 void hangy_hangy(char *string, char *hangman, char *tmp_buf);
 
 
-int main()
+int main(int argc, char *argv[])
 {
-
-    //TODO: check for words in ~./words, and if not there, error out. also, 
-    //accept user input.
-    FILE *words;
-    //words = fopen("words", "r");
-
     const char *name = getenv("HOME");
     char path[64];
+
     strcpy(path, name);
     strcat(path, "/.words");
-    printf("%s\n", path);
 
-    //FILE *pathed;
-    words = fopen(path, "r");
-    if(!words)
+    FILE *words;
+
+    if(argc < 1)
     {
+      words = fopen(path, "r");
+      if(!words)
+      {
         perror ("sorry");
+        return EX_IOERR;
+      }
     }
+    else
+    { 
+      words = fopen(argv[1], "r");
+      if(!words)
+      {
+        perror ("sorry");
+        return EX_IOERR;
+      }
+    }
+      
     
 
     char *rand_word = pick_word(words);
     strtok(rand_word, "\n ");
-
-    //DEBUGGING PRINT STATEMENTS
-    //printf("number of good lines in a file: %d\n", num_lines);//debugging
-    printf("whats is random word: %s\n", rand_word);//debugging
-    printf("strlen(rand_word)%zd\n", strlen(rand_word));//debugging
 
     int word_length = strlen(rand_word) + 1;
     char *hangman = malloc(word_length);
@@ -48,7 +53,7 @@ int main()
     strncpy(hangman, rand_word, word_length);//copy my randomword to hangman
     make_hangman(hangman);
 
-    //printf("%s:\n", hangman);
+
     guess_check(hangman, rand_word);
 
     free(rand_word);
@@ -57,7 +62,6 @@ int main()
 }
 
 
-  //a starting loop that checks and prints input, against words, and prints out
 void hangy_hangy(char *rand_word, char *hangman, char *tmp_buf)
 {
   for(size_t b=0; b < strlen(rand_word); b++)
@@ -73,7 +77,7 @@ void hangy_hangy(char *rand_word, char *hangman, char *tmp_buf)
   
 }
 
-//TODO: need to account for lines with spaces
+
 bool is_valid(char *tmp_buf)
 {
     strtok(tmp_buf, "\n");
