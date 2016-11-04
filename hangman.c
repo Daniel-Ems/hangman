@@ -1,42 +1,48 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <ctype.h>
+#include <time.h>
 
-
+bool is_valid(char *guess);
 void hangy_hangy(char *string, char *hangman, char *current);
 int main()
 {
     //TODO: turn string into a random word from a file
     char strings[64]; // initiate variable for testing
     char guess[32];
+
     FILE *words;
     words = fopen("words", "r");
+
+    srand(time (NULL));
     int a = 0;
-    while(1)
-    {
-        if(fgets(guess, sizeof(guess), words) != NULL){ 
-            a++;
-         }else{
-            break;
+    while((fgets(guess, sizeof(guess), words) != NULL)){
+        if(is_valid(guess)){
+            if((rand() / (float)RAND_MAX) <= (1.0 / ++a)){
+                strncpy(strings, guess, sizeof(strings));
+            }
          }
     }
+/*
     rewind(words);
+
     int counter = 0;
     while(2 != counter)
     {
         if(fgets(guess,sizeof(guess), words) != NULL){
+            
             counter++;
         }
-        
-        
     }
-    strncpy(strings,guess,(sizeof(strings)));
-    printf("%d\n", a);
-    //strncpy(strings, guess, sizeof(strings));
-    printf("whats in strings: %s\n", strings);
-    printf("strlen(guess)%zd\n", strlen(guess));
+*/
+    strncpy(strings,guess,(sizeof(strings)));//variable = rand()%a
+    printf("%d\n", a);//debugging
+    printf("whats in strings: %s\n", strings);//debugging
+    printf("strlen(guess)%zd\n", strlen(guess));//debugging
     char *string = strtok(strings, "\n ");
-    printf("strlen(string)%zd\n", strlen(string));
+    printf("sizeof(string)%zd\n", sizeof(string));//debugging
 
      //TODO: make this accomodate any sized word that comes in from the file.
     char hangman[32] = {'_','_','_','_'};
@@ -70,6 +76,18 @@ void hangy_hangy(char *string, char *hangman, char *current)
   
 }
 
+bool is_valid(char *guess)
+{
+    int a = 0;
+    while(guess[a]){
+      if(isalpha(guess[a])){
+          a++;
+      }else{
+          return false;
+      }
+    }
+  return true;
+}
 
   
 
