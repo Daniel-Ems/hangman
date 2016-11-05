@@ -7,7 +7,6 @@
 #include <sysexits.h>
 #include <unistd.h>
 
-
 char *pick_word(FILE *secret_words);
 void guess_check(char *hangman_holder, char *rand_word, int *games_lost, int *games_won);
 void make_hangman_holder(char *hangman_holder);
@@ -20,7 +19,6 @@ int main(int argc, char *argv[])
     char read_path[64];
     strcpy(read_path, name);
     strcat(read_path, "/.words");
-
 
     char write_path[64];
     strcpy(write_path, name);
@@ -50,6 +48,7 @@ int main(int argc, char *argv[])
       }
     }
 
+    //Unfinished code being used for statistics file.
     char tmp_buf[32];
     FILE *game_statistics;
     if(access(write_path, F_OK) != -1)
@@ -57,9 +56,8 @@ int main(int argc, char *argv[])
       game_statistics = fopen(write_path, "r+");
       while(fgets(tmp_buf, sizeof(tmp_buf), game_statistics))
       {
-        int tmp_var = strtol(tmp_buf, NULL, 10);
-        games_won = tmp_var;
-        games_lost = strtol(tmp_buf, NULL, 10);
+        games_won = = strtol(tmp_buf, NULL, 10);
+
       }
     }
     else
@@ -67,25 +65,26 @@ int main(int argc, char *argv[])
       game_statistics = fopen(write_path, "w+");
     }
 
-    
+
     char *rand_word = pick_word(secret_words);
     strtok(rand_word, "\n ");
-
 
     int word_length = strlen(rand_word) + 1;
     char *hangman_holder = malloc(word_length);
 
     strncpy(hangman_holder, rand_word, word_length);
     make_hangman_holder(hangman_holder);
-    
-  
+
     guess_check(hangman_holder, rand_word, &games_lost, &games_won);
     
     printf("Games Lost:%d/Won:%d\n", games_lost, games_won);
+
+    //Abanandoned hopes and dreams so that may code may be clean
+    //was being used for statistics file.
     fprintf(game_statistics, "%d\n", games_won);
     fprintf(game_statistics, "%d\n", games_lost);
-
     fclose(game_statistics);
+
     free(rand_word);
     fclose(secret_words);
     free(hangman_holder);
@@ -118,7 +117,6 @@ void make_hangman_holder(char *hangman_holder)
       ++hangman_holder;
     }
 }
-
 
 void guess_check(char *hangman_holder, char *rand_word, int *games_lost, int  *games_won)
 {
