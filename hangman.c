@@ -9,7 +9,7 @@
 
 //void valid_guess(char *tmp_buf);
 char *pick_word(FILE *words);
-void guess_check(char *hangman, char *rand_word, int games_lost, int games_won);
+void guess_check(char *hangman, char *rand_word, int *games_lost, int *games_won);
 void make_hangman(char *hangman);
 bool is_valid(char *tmp_buf);
 //id hangy_hangy(char *string, char *hangman, char newvar);
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     
     int games_lost = 0;
     int games_won = 0;
-    guess_check(hangman, rand_word, games_won, games_lost);
+    guess_check(hangman, rand_word, &games_lost, &games_won);
     
     printf("Games Lost:%d/Won:%d\n", games_lost, games_won);
 
@@ -127,11 +127,12 @@ void make_hangman(char *hangman)
 }
 
 
-void guess_check(char *hangman, char *rand_word, int games_lost, int  games_won)
+void guess_check(char *hangman, char *rand_word, int *games_lost, int  *games_won)
 {
   char tmp_buf[64];
   int wrong_guesses = 0;
-  printf("Games Lost:%d/Won:%d\n", games_lost, games_won);
+  printf("Games Lost:%d/Won:%d\n", *games_lost, *games_won);
+
   while(wrong_guesses != 6)
   {
     if(strncmp(hangman, rand_word, strlen(hangman)))
@@ -164,12 +165,10 @@ void guess_check(char *hangman, char *rand_word, int games_lost, int  games_won)
     {
        printf("wrong_guesses: %d, %s:\n", wrong_guesses, hangman);
        ++games_won;
-       break;
     }
-    printf("wrong_guesses: %d\n", wrong_guesses);
-    ++games_lost;
   }
-  
+  printf("wrong_guesses: %d, %s\n", wrong_guesses, rand_word);
+  ++*games_lost;
 }
 
 
