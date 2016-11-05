@@ -8,7 +8,7 @@
 #include <unistd.h>
 
 
-char *pick_word(FILE *words);
+char *pick_word(FILE *secret_words);
 void guess_check(char *hangman, char *rand_word, int *games_lost, int *games_won);
 void make_hangman(char *hangman);
 bool is_valid(char *tmp_buf);
@@ -29,12 +29,12 @@ int main(int argc, char *argv[])
     int games_lost = 0;
     int games_won =0;
 
-    FILE *words;
+    FILE *secret_words;
 
     if(argc < 2)
     {
-      words = fopen(read_path, "r");
-      if(!words)
+      secret_words = fopen(read_path, "r");
+      if(!secret_words)
       {
         perror ("sorry");
         return EX_IOERR;
@@ -42,8 +42,8 @@ int main(int argc, char *argv[])
     }
     else
     { 
-      words = fopen(argv[1], "r");
-      if(!words)
+      secret_words = fopen(argv[1], "r");
+      if(!secret_words)
       {
         perror ("sorry");
         return EX_IOERR;
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
      }
 
     
-    char *rand_word = pick_word(words);
+    char *rand_word = pick_word(secret_words);
     strtok(rand_word, "\n ");
 
 
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
 
     fclose(game_statistics);
     free(rand_word);
-    fclose(words);
+    fclose(secret_words);
     free(hangman);
 }
 
@@ -152,8 +152,8 @@ void guess_check(char *hangman, char *rand_word, int *games_lost, int  *games_wo
     else
     {
        printf("wrong_guesses: %d, %s:\n", wrong_guesses, hangman);
-       ++games_won;
-       break;
+       ++*games_won;
+       return;
     }
   }
   printf("wrong_guesses: %d, %s\n", wrong_guesses, rand_word);
@@ -164,13 +164,13 @@ void guess_check(char *hangman, char *rand_word, int *games_lost, int  *games_wo
 //This while loop was found from Liam, and the if((rand() / (float)Rand_MAX
 //< (1.0 /++ a), as well as the malloc and tmp_buf within the function.
 enum {RANDOM_MAX = 64};
-char *pick_word(FILE *words)
+char *pick_word(FILE *secret_words)
 {
     srand(time (NULL));
     int num_lines = 0;
     char *rand_word = malloc(RANDOM_MAX);
     char tmp_buf[RANDOM_MAX];
-    while(fgets(tmp_buf, RANDOM_MAX, words))
+    while(fgets(tmp_buf, RANDOM_MAX, secret_words))
     {
         if(is_valid(tmp_buf))
         {
