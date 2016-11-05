@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
       game_statistics = fopen(write_path, "r+");
       while(fgets(tmp_buf, sizeof(tmp_buf), game_statistics))
       {
-        games_won = = strtol(tmp_buf, NULL, 10);
+        games_won = strtol(tmp_buf, NULL, 10);
 
       }
     }
@@ -64,7 +64,6 @@ int main(int argc, char *argv[])
     {
       game_statistics = fopen(write_path, "w+");
     }
-
 
     char *rand_word = pick_word(secret_words);
     strtok(rand_word, "\n ");
