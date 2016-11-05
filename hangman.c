@@ -7,12 +7,11 @@
 #include <sysexits.h>
 #include <unistd.h>
 
-//void valid_guess(char *tmp_buf);
+
 char *pick_word(FILE *words);
 void guess_check(char *hangman, char *rand_word, int *games_lost, int *games_won);
 void make_hangman(char *hangman);
 bool is_valid(char *tmp_buf);
-//id hangy_hangy(char *string, char *hangman, char newvar);
 
 int main(int argc, char *argv[])
 {
@@ -56,16 +55,14 @@ int main(int argc, char *argv[])
     if(access(write_path, F_OK) != -1)
     {
        game_statistics = fopen(write_path, "r");
-       fgets(tmp_buf, 25, game_statistics);
+       fgets(tmp_buf, sizeof(tmp_buf), game_statistics);
        printf("%s\n", tmp_buf);
     }
     else
     {
       game_statistics = fopen(write_path, "w+");
-      fprintf(game_statistics, "%s: %d, %s: %d", "Games Lost",0, "Games Won", 0);
+      fprintf(game_statistics, "%d",0);
      }
-    //Game_count - obvious
-    //Average score - total number of wrong_guesses in wins/ total number of games 
 
     
     char *rand_word = pick_word(words);
@@ -75,10 +72,10 @@ int main(int argc, char *argv[])
     int word_length = strlen(rand_word) + 1;
     char *hangman = malloc(word_length);
 
-    strncpy(hangman, rand_word, word_length);//copy my randomword to hangman
+    strncpy(hangman, rand_word, word_length);
     make_hangman(hangman);
     
-    
+  
     guess_check(hangman, rand_word, &games_lost, &games_won);
     
     printf("Games Lost:%d/Won:%d\n", games_lost, games_won);
