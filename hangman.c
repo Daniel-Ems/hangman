@@ -11,7 +11,7 @@ char *pick_word(FILE *words);
 void guess_check(char *hangman, char *rand_word);
 void make_hangman(char *hangman);
 bool is_valid(char *tmp_buf);
-void hangy_hangy(char *string, char *hangman, char *tmp_buf);
+//id hangy_hangy(char *string, char *hangman, char newvar);
 
 
 int main(int argc, char *argv[])
@@ -73,37 +73,28 @@ int main(int argc, char *argv[])
     strncpy(hangman, rand_word, word_length);//copy my randomword to hangman
     make_hangman(hangman);
 
-
     guess_check(hangman, rand_word);
 
     free(rand_word);
     fclose(words);
     free(hangman);
 }
-
-
-void hangy_hangy(char *rand_word, char *hangman, char *tmp_buf)
+/*
+void hangy_hangy(char *rand_word, char *hangman, char newvar)
 {
-  int wrong_guesses = 0;
+
   for(size_t b=0; b < strlen(rand_word); b++)
   {
-    int i = 0;
     for(size_t a=0; a < strlen(rand_word); ++a)
     {
-      if(tmp_buf[b] == rand_word[a])
+      if(newvar == rand_word[a])
       {
-        hangman[a] = tmp_buf[b];
-        i++;
+        hangman[a] = newvar;
       }
     }
-    if(strlen(rand_word) - i == strlen(rand_word))
-      {
-        ++wrong_guesses;
-      }
-  }
-printf("%d", wrong_guesses);
+   }
 }
-
+*/
 
 bool is_valid(char *tmp_buf)
 {
@@ -136,18 +127,36 @@ void make_hangman(char *hangman)
 void guess_check(char *hangman, char *rand_word)
 {
   char tmp_buf[64];
-  while(1)
-  { 
-    if(strcmp(hangman, rand_word))
+  int bad_count = 0;
+
+  while(bad_count != 6)
+  {
+    if(strncmp(hangman, rand_word, strlen(hangman)))
     {
-       printf("%s:", hangman);
-       fgets(tmp_buf, sizeof(tmp_buf), stdin);
-       strtok(tmp_buf, "\n");// creates a token from the strtok
-       hangy_hangy(rand_word, hangman, tmp_buf);
+      printf("%s:", hangman);
+      fgets(tmp_buf, sizeof(rand_word), stdin);
+      char newvar = tmp_buf[0];
+      ++bad_count;
+      for(size_t b=0; b < 1; b++)
+      {
+         int good_guess = 0;
+         for(size_t a=0; a < strlen(rand_word); ++a)
+         {
+         if(newvar == rand_word[a])
+         {
+           hangman[a] = newvar;
+           good_guess = 1;
+           printf("good_guess: %d\n", good_guess);
+         }
+         }
+         bad_count = bad_count - good_guess;
+      }
+      
     }
     else
-    {
-       break;
+    { 
+    printf("bad_score: %d, %s:\n", bad_count, hangman);
+    break;
     }
   }
 }
@@ -169,9 +178,12 @@ char *pick_word(FILE *words)
             if((rand() / (float)RAND_MAX) < (1.0 / ++num_lines))
             {
                 strncpy(rand_word, tmp_buf, RANDOM_MAX);
+
+                
             }
          }
     }
+  *rand_word = tolower(*rand_word++);
   return rand_word;
 }
 
