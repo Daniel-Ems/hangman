@@ -8,5 +8,17 @@ LDLIBS += -lm
 hangman:hangman.c
 
 
+BINARY = hangman 
+OBJECT = hangman.0
+
+.PHONY: clean
+
+clean:
+	$(RM) $(BINARY)
+
+
+
+
+
 
 
