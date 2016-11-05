@@ -88,22 +88,7 @@ int main(int argc, char *argv[])
     fclose(words);
     free(hangman);
 }
-/*
-void hangy_hangy(char *rand_word, char *hangman, char newvar)
-{
 
-  for(size_t b=0; b < strlen(rand_word); b++)
-  {
-    for(size_t a=0; a < strlen(rand_word); ++a)
-    {
-      if(newvar == rand_word[a])
-      {
-        hangman[a] = newvar;
-      }
-    }
-   }
-}
-*/
 
 bool is_valid(char *tmp_buf)
 {
@@ -171,6 +156,7 @@ void guess_check(char *hangman, char *rand_word, int *games_lost, int  *games_wo
     {
        printf("wrong_guesses: %d, %s:\n", wrong_guesses, hangman);
        ++games_won;
+       break;
     }
   }
   printf("wrong_guesses: %d, %s\n", wrong_guesses, rand_word);
