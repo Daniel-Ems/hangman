@@ -9,8 +9,8 @@
 
 
 char *pick_word(FILE *secret_words);
-void guess_check(char *hangman, char *rand_word, int *games_lost, int *games_won);
-void make_hangman(char *hangman);
+void guess_check(char *hangman_holder, char *rand_word, int *games_lost, int *games_won);
+void make_hangman_holder(char *hangman_holder);
 bool is_valid(char *tmp_buf);
 
 int main(int argc, char *argv[])
@@ -70,20 +70,20 @@ int main(int argc, char *argv[])
 
 
     int word_length = strlen(rand_word) + 1;
-    char *hangman = malloc(word_length);
+    char *hangman_holder = malloc(word_length);
 
-    strncpy(hangman, rand_word, word_length);
-    make_hangman(hangman);
+    strncpy(hangman_holder, rand_word, word_length);
+    make_hangman_holder(hangman_holder);
     
   
-    guess_check(hangman, rand_word, &games_lost, &games_won);
+    guess_check(hangman_holder, rand_word, &games_lost, &games_won);
     
     printf("Games Lost:%d/Won:%d\n", games_lost, games_won);
 
     fclose(game_statistics);
     free(rand_word);
     fclose(secret_words);
-    free(hangman);
+    free(hangman_holder);
 }
 
 
@@ -105,17 +105,17 @@ bool is_valid(char *tmp_buf)
   return true;
 }
 
-void make_hangman(char *hangman)
+void make_hangman_holder(char *hangman_holder)
 {
-    while(*hangman)
+    while(*hangman_holder)
     {
-      *hangman = '_';
-      ++hangman;
+      *hangman_holder = '_';
+      ++hangman_holder;
     }
 }
 
 
-void guess_check(char *hangman, char *rand_word, int *games_lost, int  *games_won)
+void guess_check(char *hangman_holder, char *rand_word, int *games_lost, int  *games_won)
 {
   char tmp_buf[64];
   int wrong_guesses = 0;
@@ -123,13 +123,13 @@ void guess_check(char *hangman, char *rand_word, int *games_lost, int  *games_wo
 
   while(wrong_guesses != 6)
   {
-    if(strncmp(hangman, rand_word, strlen(hangman)))
+    if(strncmp(hangman_holder, rand_word, strlen(hangman_holder)))
     {
-      printf("%s:", hangman);
+      printf("%s:", hangman_holder);
       fgets(tmp_buf, sizeof(rand_word), stdin);
 
-      char newvar = tolower(tmp_buf[0]);
-      if(!isalpha(newvar)) 
+      char tmp_var = tolower(tmp_buf[0]);
+      if(!isalpha(tmp_var)) 
       {
         continue;
       }
@@ -140,9 +140,9 @@ void guess_check(char *hangman, char *rand_word, int *games_lost, int  *games_wo
       {
          for(size_t a=0; a < strlen(rand_word); ++a)
          {
-            if(newvar == rand_word[a])
+            if(tmp_var == rand_word[a])
             {
-              hangman[a] = newvar;
+              hangman_holder[a] = tmp_var;
               i = 1;
             }
          }
@@ -151,7 +151,7 @@ void guess_check(char *hangman, char *rand_word, int *games_lost, int  *games_wo
     }
     else
     {
-       printf("wrong_guesses: %d, %s:\n", wrong_guesses, hangman);
+       printf("wrong_guesses: %d, %s:\n", wrong_guesses, hangman_holder);
        ++*games_won;
        return;
     }
