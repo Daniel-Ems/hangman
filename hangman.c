@@ -22,11 +22,14 @@ int main(int argc, char *argv[])
     strcpy(read_path, name);
     strcat(read_path, "/.words");
 
-/*
+
     char write_path[64];
     strcpy(write_path, name);
     strcat(write_path, "/.hangman");
-*/
+
+    int games_lost = 0;
+    int games_won =0;
+
     FILE *words;
 
     if(argc < 2)
@@ -48,19 +51,22 @@ int main(int argc, char *argv[])
       }
     }
 
-/*
-    FILE *game_statistics = fopen(write_path, "r");
-    if(access(game_statistics, F_OK) > -1);
+    char tmp_buf[64];
+    FILE *game_statistics;
+    if(access(write_path, F_OK) != -1)
     {
-      
+       game_statistics = fopen(write_path, "r");
+       fgets(tmp_buf, 25, game_statistics);
+       printf("%s\n", tmp_buf);
     }
     else
-    }
-    Game_count - obvious
-    Win_count - number of games they guess the word 
-    Loss_count - number of games they don't guess the word
-    Average score - total number of wrong_guesses in wins/ total number of games 
-*/
+    {
+      game_statistics = fopen(write_path, "w+");
+      fprintf(game_statistics, "%s: %d, %s: %d", "Games Lost",0, "Games Won", 0);
+     }
+    //Game_count - obvious
+    //Average score - total number of wrong_guesses in wins/ total number of games 
+
     
     char *rand_word = pick_word(words);
     strtok(rand_word, "\n ");
@@ -72,12 +78,12 @@ int main(int argc, char *argv[])
     strncpy(hangman, rand_word, word_length);//copy my randomword to hangman
     make_hangman(hangman);
     
-    int games_lost = 0;
-    int games_won = 0;
+    
     guess_check(hangman, rand_word, &games_lost, &games_won);
     
     printf("Games Lost:%d/Won:%d\n", games_lost, games_won);
 
+    fclose(game_statistics);
     free(rand_word);
     fclose(words);
     free(hangman);
