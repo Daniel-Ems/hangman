@@ -50,19 +50,22 @@ int main(int argc, char *argv[])
       }
     }
 
-    char tmp_buf[64];
+    char tmp_buf[32];
     FILE *game_statistics;
     if(access(write_path, F_OK) != -1)
     {
-       game_statistics = fopen(write_path, "r");
-       fgets(tmp_buf, sizeof(tmp_buf), game_statistics);
-       printf("%s\n", tmp_buf);
+      game_statistics = fopen(write_path, "r+");
+      while(fgets(tmp_buf, sizeof(tmp_buf), game_statistics))
+      {
+        int tmp_var = strtol(tmp_buf, NULL, 10);
+        games_won = tmp_var;
+        games_lost = strtol(tmp_buf, NULL, 10);
+      }
     }
     else
     {
       game_statistics = fopen(write_path, "w+");
-      fprintf(game_statistics, "%d",0);
-     }
+    }
 
     
     char *rand_word = pick_word(secret_words);
@@ -79,6 +82,8 @@ int main(int argc, char *argv[])
     guess_check(hangman_holder, rand_word, &games_lost, &games_won);
     
     printf("Games Lost:%d/Won:%d\n", games_lost, games_won);
+    fprintf(game_statistics, "%d\n", games_won);
+    fprintf(game_statistics, "%d\n", games_lost);
 
     fclose(game_statistics);
     free(rand_word);
